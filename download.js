@@ -92,6 +92,7 @@
     event.preventDefault();if(busy)return;
     const url=$('url').value.trim();
     if(!validPost(url)){message(errors.INVALID_POST_URL,true);$('url').focus();return;}
+    message('');
     if(!session){pending=true;$('auth-dialog').showModal();return;}
     busy=true;$('resolve').disabled=true;$('resolve').textContent='미디어 확인 중…';$('results').hidden=true;message('공개 게시물에서 미디어를 확인하고 있습니다.');
     try {
