@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Anvel SNS Media Downloader. 게시물 링크로 사진과 영상을 확인하고 원하는 미디어만 저장하세요.">
-  <title>Anvel — SNS 미디어 다운로더</title>
+  <title>SNS Media Downloader</title>
   <link rel="stylesheet" href="download.css">
   <script src="download.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#url">입력창으로 건너뛰기</a>
   <header class="header wrap">
-    <a class="brand" href="./" aria-label="Anvel 홈"><span>anvel<span class="brand-dot">.</span></span></a>
+    <a class="brand" href="./" aria-label="SNS Media Downloader 홈"><span>SNS Media <span class="brand-accent">Downloader</span></span></a>
     <nav aria-label="주 메뉴"><a href="#how">사용 방법</a><a href="#faq">자주 묻는 질문</a><button id="account" class="account">로그인 <span aria-hidden="true">↗</span></button></nav>
   </header>
   <main>
@@ -34,6 +34,6 @@
     <section class="notice wrap"><span class="notice-mark" aria-hidden="true">↗</span><div><h2>로그인이 필요한 게시물인가요?</h2><p>웹에서 원본을 찾지 못하는 게시물은 Chrome 확장 프로그램을 이용해 주세요.<br>웹 버전은 공개 페이지에서 제공되는 미디어만 처리합니다.</p></div><a href="support.html">확장 프로그램 안내 ↗</a></section>
     <section id="faq" class="faq wrap"><div><div class="section-label">02 / GOOD TO KNOW</div><h2>궁금한 점을<br>모아봤어요.</h2><a href="mailto:taehuikim@caleup.ai">다른 문의가 있나요? ↗</a></div><div class="questions"><details><summary>어떤 링크를 사용할 수 있나요?</summary><p>Instagram 게시물·릴스, X 게시물, Threads 게시물 링크를 입력할 수 있습니다. 사이트의 공개 응답에 원본이 없거나 요청이 제한되면 추출에 실패할 수 있습니다.</p></details><details><summary>비공개 계정도 다운로드할 수 있나요?</summary><p>웹 버전은 비공개 게시물이나 로그인이 필요한 콘텐츠에 접근하지 않습니다. SNS 비밀번호와 로그인 쿠키를 요청하지 않습니다.</p></details><details><summary>영상과 여러 장의 사진도 지원하나요?</summary><p>공개 데이터에 직접 MP4 주소나 이미지 원본이 있으면 선택할 수 있습니다. HLS·DASH 영상 변환은 지원하지 않으며 모든 게시물의 추출을 보장하지 않습니다.</p></details><details><summary>파일이나 게시물 링크를 저장하나요?</summary><p>미디어 파일을 서버에 보관하지 않습니다. 입력한 URL은 처리 목적으로 Supabase 서버와 해당 SNS로 전송되며, 호스팅 서비스는 보안·운영 로그를 처리할 수 있습니다. 자세한 내용은 웹 서비스 개인정보 안내를 확인하세요.</p></details><details><summary>왜 Anvel 로그인이 필요한가요?</summary><p>테스트 서비스의 사용 권한을 확인하기 위한 로그인입니다. SNS 계정과는 별개이며, 현재 결제나 구독을 청구하지 않습니다.</p></details></div></section>
   </main>
-  <footer class="footer wrap"><a class="brand" href="./">anvel.</a><p>필요한 순간을, 간편하게.</p><div><a href="web-privacy.html">웹 서비스 개인정보 안내</a><a href="privacy.html">확장 프로그램 개인정보처리방침</a><a href="support.html">고객 지원</a><span>© Anvel</span></div><small>Instagram, X, Threads 및 Google과 제휴하지 않은 독립 서비스입니다.</small></footer>
+  <footer class="footer wrap"><a class="brand" href="./">SNS Media Downloader</a><p>필요한 순간을, 간편하게.</p><div><a href="web-privacy.html">웹 서비스 개인정보 안내</a><a href="privacy.html">확장 프로그램 개인정보처리방침</a><a href="support.html">고객 지원</a><span>© Anvel</span></div><small>Instagram, X, Threads 및 Google과 제휴하지 않은 독립 서비스입니다.</small></footer>
   <dialog id="auth-dialog"><form id="login-form"><button type="button" id="close-auth" class="close" aria-label="로그인 창 닫기">×</button><p class="eyebrow">ANVEL ACCOUNT</p><h2>계속하려면 로그인</h2><p class="auth-info">Anvel 테스트 계정으로 로그인하세요.<br>SNS 계정의 비밀번호는 입력하지 마세요.</p><label for="email">이메일</label><input id="email" type="email" autocomplete="username" required><label for="password">비밀번호</label><input id="password" type="password" autocomplete="current-password" required><p id="auth-message" role="status" hidden></p><button class="primary" id="login-submit" type="submit">로그인</button><p class="auth-help">테스트 계정은 <a href="mailto:taehuikim@caleup.ai">운영자에게 문의</a>해 주세요.</p></form></dialog>
 </body></html>
