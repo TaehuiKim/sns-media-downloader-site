@@ -18,23 +18,23 @@
     $('message').classList.toggle('error',error);
     $('message').hidden = !text;
   }
-  function platform(value) {
-    for (const button of document.querySelectorAll('.platform')) {
-      const active = button.dataset.platform === value;
-      button.classList.toggle('active',active); button.setAttribute('aria-pressed',String(active));
-    }
-    const name = {instagram:'Instagram',x:'X / Twitter',threads:'Threads'}[value];
-    $('url').placeholder = `${name} 게시물 링크를 붙여넣으세요`;
-  }
-  for (const button of document.querySelectorAll('.platform')) button.addEventListener('click',()=>{platform(button.dataset.platform);$('url').focus();});
-  $('url').addEventListener('input',()=>{
+  function detectPlatform() {
+    const value = $('url').value.trim();
+    let name = '';
     try {
-      const host = new URL($('url').value).hostname.replace(/^www\./,'');
-      if (host === 'instagram.com') platform('instagram');
-      if (host === 'x.com' || host === 'twitter.com') platform('x');
-      if (host === 'threads.com' || host === 'threads.net') platform('threads');
+      const url = new URL(value);
+      if (url.protocol === 'https:' && !url.username && !url.password && !url.port) {
+        const host = url.hostname.replace(/^www\./,'');
+        if (host === 'instagram.com') name = 'Instagram';
+        if (host === 'x.com' || host === 'twitter.com') name = 'X / Twitter';
+        if (host === 'threads.com' || host === 'threads.net') name = 'Threads';
+      }
     } catch { /* Partial typing is expected. */ }
-  });
+    $('detected-platform').textContent = name ? `${name} 링크 인식됨` :
+      value ? 'Instagram, X, Threads의 게시물 링크를 입력해 주세요' :
+      'Instagram · X / Twitter · Threads 링크 자동 인식';
+  }
+  $('url').addEventListener('input', detectPlatform);
   $('paste').addEventListener('click',async()=>{
     try {$('url').value = await navigator.clipboard.readText();$('url').dispatchEvent(new Event('input'));$('url').focus();}
     catch {message('입력창에서 붙여넣기 단축키(Ctrl+V 또는 ⌘V)를 사용해 주세요.');$('url').focus();}
@@ -91,6 +91,7 @@
   $('resolve-form').addEventListener('submit',async event=>{
     event.preventDefault();if(busy)return;
     const url=$('url').value.trim();
+    detectPlatform();
     if(!validPost(url)){message(errors.INVALID_POST_URL,true);$('url').focus();return;}
     message('');
     if(!session){pending=true;$('auth-dialog').showModal();return;}

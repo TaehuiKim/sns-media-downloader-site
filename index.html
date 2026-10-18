@@ -19,15 +19,10 @@
       <h1 id="title">마음에 드는 순간,<br><span>링크 하나로 저장.</span></h1>
       <p class="intro">사진부터 영상까지. 게시물 링크를 붙여넣고<br class="desktop"> 필요한 미디어만 골라서 가져오세요.</p>
       <div class="tool">
-        <div class="platforms" role="group" aria-label="사이트 선택">
-          <button type="button" class="platform active" data-platform="instagram" aria-pressed="true"><span aria-hidden="true">◎</span> Instagram</button>
-          <button type="button" class="platform" data-platform="x" aria-pressed="false"><span aria-hidden="true">𝕏</span> X / Twitter</button>
-          <button type="button" class="platform" data-platform="threads" aria-pressed="false"><span aria-hidden="true">＠</span> Threads</button>
-        </div>
         <form id="resolve-form" novalidate>
           <label for="url">게시물 URL</label>
-          <div class="input-row"><span class="link-icon" aria-hidden="true">↗</span><input id="url" name="url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="Instagram 게시물 링크를 붙여넣으세요" required maxlength="2048"><button id="paste" type="button" title="클립보드에서 붙여넣기">붙여넣기</button><button id="resolve" class="primary" type="submit">미디어 찾기 <span aria-hidden="true">↓</span></button></div>
-          <div class="under-input"><span>공개 게시물 · 사진 · 직접 MP4 영상</span><span>현재 테스트 운영 중</span></div>
+          <div class="input-row"><span class="link-icon" aria-hidden="true">↗</span><input id="url" name="url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="Instagram, X, Threads 게시물 링크를 붙여넣으세요" required maxlength="2048"><button id="paste" type="button" title="클립보드에서 붙여넣기">붙여넣기</button><button id="resolve" class="primary" type="submit">미디어 찾기 <span aria-hidden="true">↓</span></button></div>
+          <div class="under-input"><span id="detected-platform" role="status" aria-live="polite">Instagram · X / Twitter · Threads 링크 자동 인식</span><span>현재 테스트 운영 중</span></div>
         </form>
         <p id="message" class="message" role="status" aria-live="polite" hidden></p>
         <section id="results" aria-label="찾은 미디어" hidden><div class="result-heading"><h2>저장할 미디어를 선택하세요</h2><label><input id="select-all" type="checkbox" checked> 전체 선택</label></div><div id="gallery" class="gallery"></div><button id="download" class="primary">선택 항목 저장</button><p class="download-note">새 탭으로 열린 원본은 브라우저의 저장 기능으로 저장할 수 있습니다.</p></section>
