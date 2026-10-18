@@ -1,1 +1,44 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="SNS Media Downloader by Anvel. 사용 안내, 지원 및 개인정보처리방침."><title>소개 · SNS Media Downloader</title><link rel="icon" href="icon.png"><link rel="stylesheet" href="style.css"></head><body><header><a class="brand" href="./"><img src="icon.png" alt="">SNS Media Downloader</a><nav aria-label="주 메뉴"><a href="./">소개</a><a href="privacy.html">개인정보처리방침</a><a href="support.html">지원</a></nav></header><main><p class="eyebrow">Anvel / Browser utility</p><h1>저장할 미디어만,<br>직접 골라서.</h1><p class="lead">X, Instagram, Threads의 사진과 직접 MP4 영상을<br>내 기기로 저장하는 Chrome 확장 프로그램입니다.</p><p class="meta">Chrome 웹 스토어 등록 준비 중 · 로그인 및 원본 URL 제공 여부에 따라 지원 범위가 달라집니다.</p><div class="feature"><strong>여러 항목도 골라서 저장</strong><p>미리보기, 개별 선택, 전체 선택·해제와 취소를 지원합니다.</p></div><div class="feature"><strong>결과까지 확인</strong><p>요청 접수와 파일 저장 완료, 중단·오류를 구분해 안내합니다.</p></div><div class="feature"><strong>브라우저 안에서 처리</strong><p>미디어 매칭은 탭 메모리에서 수행하며 개발자 서버로 게시물이나 미디어를 업로드하지 않습니다.</p></div><a class="cta" href="support.html">사용 방법과 지원</a><p>본인 소유이거나 권리자로부터 저장을 허락받은 콘텐츠에 사용하세요. 접근 제한·유료벽·DRM 우회 기능은 없으며 HLS/DASH 변환은 지원하지 않습니다.</p></main><footer>© Anvel · <a href="mailto:taehuikim@caleup.ai">taehuikim@caleup.ai</a><br>Instagram, Threads, X 및 Google과 제휴하거나 이들이 제공하는 제품이 아닙니다.</footer></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Anvel SNS Media Downloader. 게시물 링크로 사진과 영상을 확인하고 원하는 미디어만 저장하세요.">
+  <title>Anvel — SNS 미디어 다운로더</title>
+  <link rel="icon" href="icon.png"><link rel="stylesheet" href="download.css">
+  <script src="download.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#url">입력창으로 건너뛰기</a>
+  <header class="header wrap">
+    <a class="brand" href="./" aria-label="Anvel 홈"><img src="icon.png" alt="" width="34" height="34"><span>anvel<span class="brand-dot">.</span></span></a>
+    <nav aria-label="주 메뉴"><a href="#how">사용 방법</a><a href="#faq">자주 묻는 질문</a><button id="account" class="account">로그인 <span aria-hidden="true">↗</span></button></nav>
+  </header>
+  <main>
+    <section class="hero wrap" aria-labelledby="title">
+      <p class="eyebrow"><span class="status-dot"></span> SNS MEDIA DOWNLOADER <span class="beta">PREVIEW</span></p>
+      <h1 id="title">마음에 드는 순간,<br><span>링크 하나로 저장.</span></h1>
+      <p class="intro">사진부터 영상까지. 게시물 링크를 붙여넣고<br class="desktop"> 필요한 미디어만 골라서 가져오세요.</p>
+      <div class="tool">
+        <div class="platforms" role="group" aria-label="사이트 선택">
+          <button type="button" class="platform active" data-platform="instagram" aria-pressed="true"><span aria-hidden="true">◎</span> Instagram</button>
+          <button type="button" class="platform" data-platform="x" aria-pressed="false"><span aria-hidden="true">𝕏</span> X / Twitter</button>
+          <button type="button" class="platform" data-platform="threads" aria-pressed="false"><span aria-hidden="true">＠</span> Threads</button>
+        </div>
+        <form id="resolve-form" novalidate>
+          <label for="url">게시물 URL</label>
+          <div class="input-row"><span class="link-icon" aria-hidden="true">↗</span><input id="url" name="url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="Instagram 게시물 링크를 붙여넣으세요" required maxlength="2048"><button id="paste" type="button" title="클립보드에서 붙여넣기">붙여넣기</button><button id="resolve" class="primary" type="submit">미디어 찾기 <span aria-hidden="true">↓</span></button></div>
+          <div class="under-input"><span>공개 게시물 · 사진 · 직접 MP4 영상</span><span>현재 테스트 운영 중</span></div>
+        </form>
+        <p id="message" class="message" role="status" aria-live="polite" hidden></p>
+        <section id="results" aria-label="찾은 미디어" hidden><div class="result-heading"><h2>저장할 미디어를 선택하세요</h2><label><input id="select-all" type="checkbox" checked> 전체 선택</label></div><div id="gallery" class="gallery"></div><button id="download" class="primary">선택 항목 저장</button><p class="download-note">새 탭으로 열린 원본은 브라우저의 저장 기능으로 저장할 수 있습니다.</p></section>
+      </div>
+      <p class="permission">본인 소유이거나 저장을 허락받은 콘텐츠에 사용해 주세요.</p>
+      <div class="hero-bottom"><span>LESS SEARCHING. MORE KEEPING.</span><span aria-hidden="true">SCROLL TO EXPLORE ↓</span></div>
+    </section>
+    <section id="how" class="how wrap" aria-labelledby="how-title"><div class="section-label">01 / HOW IT WORKS</div><div class="section-heading"><h2 id="how-title">복잡한 과정 없이,<br>세 단계면 충분해요.</h2><p>SNS 계정 비밀번호나 쿠키를<br>입력할 필요가 없습니다.</p></div><ol class="steps"><li><span class="step-no">01</span><div><h3>게시물 링크 복사</h3><p>Instagram, X, Threads에서<br>게시물의 공유 링크를 복사하세요.</p></div><div class="step-visual url-visual" aria-hidden="true"><span>↗</span> instagram.com/p/… <b>복사 ✓</b></div></li><li><span class="step-no">02</span><div><h3>붙여넣고 미디어 찾기</h3><p>위 입력창에 링크를 넣으면<br>접근 가능한 원본을 확인합니다.</p></div><div class="step-visual search-visual" aria-hidden="true"><span>https://…</span><b>↓</b></div></li><li><span class="step-no">03</span><div><h3>원하는 항목만 저장</h3><p>여러 장의 사진이나 영상도<br>선택한 항목만 저장하세요.</p></div><div class="step-visual save-visual" aria-hidden="true"><span>▧ <i>✓</i></span><span>▷ <i>✓</i></span><b>↓</b></div></li></ol></section>
+    <section class="notice wrap"><span class="notice-mark" aria-hidden="true">↗</span><div><h2>로그인이 필요한 게시물인가요?</h2><p>웹에서 원본을 찾지 못하는 게시물은 Chrome 확장 프로그램을 이용해 주세요.<br>웹 버전은 공개 페이지에서 제공되는 미디어만 처리합니다.</p></div><a href="support.html">확장 프로그램 안내 ↗</a></section>
+    <section id="faq" class="faq wrap"><div><div class="section-label">02 / GOOD TO KNOW</div><h2>궁금한 점을<br>모아봤어요.</h2><a href="mailto:taehuikim@caleup.ai">다른 문의가 있나요? ↗</a></div><div class="questions"><details><summary>어떤 링크를 사용할 수 있나요?</summary><p>Instagram 게시물·릴스, X 게시물, Threads 게시물 링크를 입력할 수 있습니다. 사이트의 공개 응답에 원본이 없거나 요청이 제한되면 추출에 실패할 수 있습니다.</p></details><details><summary>비공개 계정도 다운로드할 수 있나요?</summary><p>웹 버전은 비공개 게시물이나 로그인이 필요한 콘텐츠에 접근하지 않습니다. SNS 비밀번호와 로그인 쿠키를 요청하지 않습니다.</p></details><details><summary>영상과 여러 장의 사진도 지원하나요?</summary><p>공개 데이터에 직접 MP4 주소나 이미지 원본이 있으면 선택할 수 있습니다. HLS·DASH 영상 변환은 지원하지 않으며 모든 게시물의 추출을 보장하지 않습니다.</p></details><details><summary>파일이나 게시물 링크를 저장하나요?</summary><p>미디어 파일을 서버에 보관하지 않습니다. 입력한 URL은 처리 목적으로 Supabase 서버와 해당 SNS로 전송되며, 호스팅 서비스는 보안·운영 로그를 처리할 수 있습니다. 자세한 내용은 웹 서비스 개인정보 안내를 확인하세요.</p></details><details><summary>왜 Anvel 로그인이 필요한가요?</summary><p>테스트 서비스의 사용 권한을 확인하기 위한 로그인입니다. SNS 계정과는 별개이며, 현재 결제나 구독을 청구하지 않습니다.</p></details></div></section>
+  </main>
+  <footer class="footer wrap"><a class="brand" href="./">anvel.</a><p>필요한 순간을, 간편하게.</p><div><a href="web-privacy.html">웹 서비스 개인정보 안내</a><a href="privacy.html">확장 프로그램 개인정보처리방침</a><a href="support.html">고객 지원</a><span>© Anvel</span></div><small>Instagram, X, Threads 및 Google과 제휴하지 않은 독립 서비스입니다.</small></footer>
+  <dialog id="auth-dialog"><form id="login-form"><button type="button" id="close-auth" class="close" aria-label="로그인 창 닫기">×</button><p class="eyebrow">ANVEL ACCOUNT</p><h2>계속하려면 로그인</h2><p class="auth-info">Anvel 테스트 계정으로 로그인하세요.<br>SNS 계정의 비밀번호는 입력하지 마세요.</p><label for="email">이메일</label><input id="email" type="email" autocomplete="username" required><label for="password">비밀번호</label><input id="password" type="password" autocomplete="current-password" required><p id="auth-message" role="status" hidden></p><button class="primary" id="login-submit" type="submit">로그인</button><p class="auth-help">테스트 계정은 <a href="mailto:taehuikim@caleup.ai">운영자에게 문의</a>해 주세요.</p></form></dialog>
+</body></html>
