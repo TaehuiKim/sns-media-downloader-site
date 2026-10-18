@@ -103,7 +103,7 @@
       if(!response.ok)throw Error(errors[result.error]||'미디어를 찾지 못했습니다. 잠시 후 다시 시도해 주세요.');
       render(Array.isArray(result.media)?result.media:[]);
     }catch(error){message(error.name==='TimeoutError'?'요청 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.':error.message,true);}
-    finally{busy=false;$('resolve').disabled=false;$('resolve').textContent='미디어 찾기 ↓';}
+    finally{busy=false;$('resolve').disabled=false;$('resolve').innerHTML='미디어 찾기 <span aria-hidden="true">↓</span>';}
   });
   $('download').addEventListener('click',async()=>{
     const selected=[...$('gallery').querySelectorAll('input:checked')].map(c=>media[Number(c.dataset.index)]);
