@@ -5,3 +5,5 @@
 /* Keep the action label and arrow centered independently of font baselines. */
 #resolve{display:inline-flex;align-items:center;justify-content:center;gap:16px}
 #resolve span{display:inline-flex;align-items:center;justify-content:center;margin-left:0;line-height:1;transform:translateY(2px)}
+
+.google-login{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;padding:12px;background:white;border:1px solid #cbd4c5;border-radius:7px;color:var(--ink);margin:22px 0;cursor:pointer}.google-login>span{font:bold 20px Georgia,serif;color:var(--blue)}.plan-panel{padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:20px 0}.plan-panel h3{margin:0;font-size:16px}.plan-panel p{font-size:12px;color:#7e8975}.text-action{background:none;border:0;padding:8px 0;color:var(--blue);display:block;font-size:12px;cursor:pointer}.header nav{gap:18px}#account-email{overflow-wrap:anywhere}@media(max-width:420px){.header{flex-wrap:wrap;height:auto;padding-top:20px;padding-bottom:18px;gap:15px}.header nav{margin-left:auto;gap:8px}}

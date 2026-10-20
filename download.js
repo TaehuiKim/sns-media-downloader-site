@@ -1,18 +1,18 @@
 'use strict';
 (() => {
-  const base = 'https://nstmmxgtxtfigkjzkogj.supabase.co';
-  // Public project identifier, never a service_role key. Filled during site build.
-  const key = 'sb_publishable_lb3eAU0OxPQT07ukIUP87g_9vJFyhsg';
+  const account = window.SNSAccount;
+  const base = account.BASE, key = account.PUBLIC_KEY;
   const $ = id => document.getElementById(id);
   const errors = {
-    LOGIN_REQUIRED:'Anvel 테스트 계정으로 먼저 로그인해 주세요.',
+    LOGIN_REQUIRED:'Google 계정으로 먼저 로그인해 주세요.',
+    PAYMENT_REQUIRED:'웹·확장 공통 이용권이 필요합니다.',
     INVALID_POST_URL:'Instagram, X, Threads의 올바른 게시물 링크를 입력해 주세요.',
     PUBLIC_POST_UNAVAILABLE:'SNS에서 공개 페이지를 제공하지 않거나 요청을 제한했습니다. 로그인된 브라우저의 확장 프로그램을 이용해 주세요.',
     MEDIA_UNAVAILABLE:'공개 페이지에서 원본 미디어를 찾지 못했습니다. Chrome 확장 프로그램을 이용해 주세요.',
     UPSTREAM_UNAVAILABLE:'SNS에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.',
     POST_TOO_LARGE:'이 게시물은 웹에서 처리할 수 있는 크기를 초과했습니다.',
   };
-  let session = null, media = [], busy = false, pending = false;
+  let session = null, media = [], busy = false, license = {active:false};
   function message(text, error = false) {
     $('message').textContent = text;
     $('message').classList.toggle('error',error);
@@ -71,30 +71,68 @@
   }
   function selection(){const checks=[...$('gallery').querySelectorAll('input')],count=checks.filter(c=>c.checked).length;$('download').disabled=!count;$('download').textContent=`선택한 ${count}개 저장`;$('select-all').checked=count===checks.length&&count>0;$('select-all').indeterminate=count>0&&count<checks.length;}
   $('select-all').addEventListener('change',()=>{for(const c of $('gallery').querySelectorAll('input'))c.checked=$('select-all').checked;selection();});
-  $('account').addEventListener('click',()=>{
-    if(session){session=null;$('account').textContent='로그인 ↗';message('로그아웃했습니다.');return;}
-    $('auth-dialog').showModal();
+  function authMessage(text){$('auth-message').textContent=text;$('auth-message').hidden=!text;}
+  function showAccount(){if(!$('auth-dialog').open)$('auth-dialog').showModal();}
+  async function refreshLicense(){
+    $('account').textContent=session?'계정·이용권':'로그인 ↗';
+    $('account-title').textContent=session?'내 계정과 이용권':'Google로 시작하세요';
+    $('account-email').textContent=session?.user?.email || '웹과 확장에서 같은 Google 계정을 사용하세요.';
+    $('google-login').hidden=!!session;$('sign-out').hidden=!session;
+    $('refresh-license').hidden=!session;$('manage-billing').hidden=!session;
+    $('purchase').disabled=true;license={active:false};
+    if(!session){$('license-status').textContent='로그인 후 이용권을 확인하세요.';return;}
+    try{
+      const result=await account.billing();license=result.access;
+      $('license-status').textContent=license.active?`이용권 활성${license.expiresAt?' · '+new Date(license.expiresAt).toLocaleDateString()+'까지':''}`:
+        result.checkoutReady?'활성 이용권이 없습니다. 결제 후 웹과 확장에서 사용할 수 있습니다.':'결제 서비스를 준비 중입니다. 아직 결제할 수 없습니다.';
+      $('purchase').disabled=license.active||!result.checkoutReady;
+    }catch(error){$('license-status').textContent=error.message;}
+  }
+  $('account').addEventListener('click',showAccount);$('plans').addEventListener('click',showAccount);
+  $('close-auth').addEventListener('click',()=>{$('auth-dialog').close();});
+  $('google-login').addEventListener('click',async()=>{
+    $('google-login').disabled=true;authMessage('Google 로그인으로 이동합니다.');
+    try{sessionStorage.setItem('sns-open-account','1');await account.google();}
+    catch(error){authMessage(error.message);$('google-login').disabled=false;}
   });
-  $('close-auth').addEventListener('click',()=>{$('auth-dialog').close();pending=false;});
-  $('auth-dialog').addEventListener('cancel',()=>{pending=false;});
-  $('login-form').addEventListener('submit',async event=>{
-    event.preventDefault();$('login-submit').disabled=true;$('auth-message').hidden=true;
-    try {
-      const response=await fetch(`${base}/auth/v1/token?grant_type=password`,{method:'POST',headers:{apikey:key,'Content-Type':'application/json'},body:JSON.stringify({email:$('email').value.trim(),password:$('password').value}),signal:AbortSignal.timeout(15000)});
-      const result=await response.json();
-      if(!response.ok||!result.access_token)throw Error('이메일과 비밀번호를 확인해 주세요. 테스트 계정이 없다면 운영자에게 문의해 주세요.');
-      session=result;$('password').value='';$('account').textContent='로그아웃';$('auth-dialog').close();
-      if(pending){pending=false;$('resolve-form').requestSubmit();}else message('로그인했습니다. 게시물 링크를 입력해 주세요.');
-    }catch(error){$('auth-message').textContent=error.name==='TimeoutError'?'로그인 요청 시간이 초과되었습니다.':error.message;$('auth-message').hidden=false;}
-    finally{$('login-submit').disabled=false;}
+  $('sign-out').addEventListener('click',async()=>{
+    const {error}=await account.client.auth.signOut();if(error){authMessage(error.message);return;}
+    session=null;license={active:false};$('results').hidden=true;$('gallery').replaceChildren();await refreshLicense();authMessage('로그아웃했습니다.');
   });
+  $('refresh-license').addEventListener('click',()=>refreshLicense());
+  $('manage-billing').addEventListener('click',()=>account.portal().catch(error=>authMessage(error.message)));
+  $('purchase').addEventListener('click',async()=>{
+    $('purchase').disabled=true;authMessage('Paddle 결제창을 준비합니다.');
+    try{await account.checkout(async()=>{
+      authMessage('결제를 확인하고 있습니다. 서버 검증 후 이용권이 활성화됩니다.');
+      for(let i=0;i<12&&session;i++){
+        await new Promise(resolve=>setTimeout(resolve,2500));await refreshLicense();
+        if(license.active){authMessage('이용권이 활성화되었습니다.');return;}
+      }
+      authMessage('결제 확인이 지연되고 있습니다. 잠시 후 이용권을 새로고침해 주세요.');
+    });authMessage('결제를 완료하면 서버에서 이용권을 확인합니다.');}
+    catch(error){authMessage(error.message);}
+    finally{await refreshLicense();}
+  });
+  account.client.auth.onAuthStateChange((_event,next)=>{
+    session=next;setTimeout(()=>refreshLicense(),0);
+  });
+  account.client.auth.getSession().then(async({data,error})=>{
+    session=data.session;await refreshLicense();if(error)authMessage('로그인을 완료하지 못했습니다. 다시 시도해 주세요.');
+    if(new URL(location.href).searchParams.get('purchase')==='1'||sessionStorage.getItem('sns-open-account')){
+      sessionStorage.removeItem('sns-open-account');showAccount();
+    }
+  }).catch(error=>authMessage(error.message));
   $('resolve-form').addEventListener('submit',async event=>{
     event.preventDefault();if(busy)return;
     const url=$('url').value.trim();
     detectPlatform();
     if(!validPost(url)){message(errors.INVALID_POST_URL,true);$('url').focus();return;}
     message('');
-    if(!session){pending=true;$('auth-dialog').showModal();return;}
+    const current=await account.client.auth.getSession();session=current.data.session;
+    if(!session){showAccount();return;}
+    await refreshLicense();
+    if(!license.active){showAccount();return;}
     busy=true;$('resolve').disabled=true;$('resolve').textContent='미디어 확인 중…';$('results').hidden=true;message('공개 게시물에서 미디어를 확인하고 있습니다.');
     try {
       const response=await fetch(`${base}/functions/v1/media-resolve`,{method:'POST',headers:{apikey:key,Authorization:`Bearer ${key}`,'x-user-authorization':`Bearer ${session.access_token}`,'Content-Type':'application/json'},body:JSON.stringify({url}),signal:AbortSignal.timeout(25000)});
